@@ -1,0 +1,557 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
+:root {
+  font-size: 15px;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  background-color: #74eb7e;
+  background-image: 
+    radial-gradient(closest-side, rgba(67,233,123, 1), rgba(67,233,123, 0)),
+    radial-gradient(closest-side, rgb(56, 249, 185,1), rgba(56, 249, 185, 0)),
+    radial-gradient(closest-side, rgba(150,251,196, 1), rgba(150,251,196, 0)),
+    radial-gradient(closest-side, rgb(205, 249, 134,1), rgba(205, 249, 134, 0)),
+    radial-gradient(closest-side, rgba(94,231,223, 1), rgba(94,231,223, 0));
+  background-size: 
+    130vmax 130vmax,
+    80vmax 80vmax,
+    90vmax 90vmax,
+    110vmax 110vmax,
+    90vmax 90vmax;
+  background-position:
+    -80vmax -80vmax,
+    60vmax -30vmax,
+    10vmax 10vmax,
+    -30vmax -10vmax,
+    50vmax 50vmax;
+  background-repeat: no-repeat;
+  animation: 10s movement linear infinite;
+}
+
+body::after {
+  content: '';
+  display: block;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+body > span {
+  position: absolute;
+  top: 12%;
+  z-index: 10;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  font-size: 3.7rem;
+  color: transparent;
+  text-shadow:
+    0px 0px 1px rgba(255, 255, 255, .6),
+    0px 4px 4px rgba(0, 0, 0, .05);
+  letter-spacing: .2rem;
+  font-weight: bold;
+}
+
+.container{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-35%);
+  background-color: #fff;
+  border-radius: 32px;
+  width: 35vw;
+  height: 50vh;
+  z-index: 10;
+  box-shadow: 0 6px 15px rgb(36 37 38 / 8%);
+}
+
+.top{
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-style: preserve-3d;
+  z-index: 1;
+  /* animation: flip-reverse 0.75s cubic-bezier(.76,-0.51,.29,1.5) forwards; */
+}
+
+.avatar{
+  /* position: absolute; */
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 15px;
+  width: 100px;
+  height: 100px;
+  /* left: 50%; */
+  /* transform: translate(-50%, -50%); */
+  border: 1px solid #eee;
+  box-shadow: 0 6px 15px rgb(36 37 38 / 8%);
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.scale{
+  transform: scale(.92) !important;
+}
+
+.scale-reverse{
+  transform: rotateY(180deg) scale(.92) !important;
+}
+
+.flip{
+  animation: flip 0.75s cubic-bezier(.76,-0.51,.29,1.5) forwards;
+}
+
+.flip-reverse{
+  animation: flip-reverse 0.75s cubic-bezier(.76,-0.51,.29,1.5) forwards;
+}
+
+.avatar.front{
+  position: absolute;
+}
+
+.avatar.back{
+  transform-style: preserve-3d;
+  transform: rotateY(180deg);
+}
+
+.avatar > img{
+  width: 100px;
+  height: 100px;
+}
+
+.mask-front, .mask-back{
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  background-color: rgba(0,0,0,.25);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #eee;
+  font-weight: bold;
+  font-size: 16px;
+  transition: opacity .3s ease;
+  box-shadow: 0 6px 15px rgb(36 37 38 / 8%);
+  /* z-index: 10; */
+}
+
+.mask-success{
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0,0,0,.25);
+  backdrop-filter: blur(3px);
+  border-radius: 50%;
+  padding: 15px;
+  width: 100px;
+  height: 100px;
+  box-shadow: 0 6px 15px rgb(36 37 38 / 8%);
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+
+.mask-success > img{
+  width: 44px;
+}
+
+.form{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 10%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.wrapper{
+  position: relative;
+  width: 60%;
+  background: #fff;
+}
+.wrapper .input-data{
+  height: 40px;
+  width: 100%;
+  position: absolute;
+}
+.wrapper .input-data input{
+  height: 100%;
+  width: 100%;
+  border: none;
+  font-size: 17px;
+  border-bottom: 2px solid silver;
+  outline: none;
+}
+.input-data input:focus ~ label,
+.input-data input:valid ~ label{
+  transform: translateY(-25px);
+  font-size: 15px;
+  color: #2ecc71;
+}
+.wrapper .input-data label{
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  color: grey;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+.wrapper .input-data .underline{
+  position: absolute;
+  bottom: 0px;
+  height: 2px;
+  width: 100%;
+}
+.input-data .underline:before{
+  position: absolute;
+  content: "";
+  height: 100%;
+  bottom: -1px;
+  width: 100%;
+  background: #2ecc71;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+.input-data input:focus ~ .underline:before,
+.input-data input:valid ~ .underline:before{
+  transform: scaleX(1);
+}
+
+.form.login > .wrapper:first-child{
+  top: 12%;
+}
+
+.form.login > .wrapper:nth-child(2){
+  top: 34%;
+}
+
+.form.register > .wrapper:first-child{
+  top: 10%;
+}
+
+.form.register > .wrapper:nth-child(2){
+  top: 27%;
+}
+
+.back-btn{
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 14px;
+  top: -3%;
+  left: 5%;
+  color: #27ae60;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.back-btn:hover{
+  transform: scale(1.1);
+  font-weight: bold;
+}
+
+.codeTag{
+  position: absolute;
+  top: 23%;
+  right: 0;
+  font-size: 14px;
+  cursor: pointer;
+  color: #27ae60;
+  animation: fadeIn .8s ease;
+  display: none;
+}
+
+.tag-btn{
+  display: flex;
+  align-items: center;
+}
+
+.tag-btn > div{
+  color: #1dd1a1;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.tag-btn > p{
+  color: grey;
+  cursor: auto;
+}
+
+.tag-btn > div:hover{
+  color: #15c797;
+  transform: translateX(10%) scale(1.15);
+}
+
+.login-btn{
+  border-radius: 50%;
+  position: absolute;
+  top: 61%;
+  background-color: #27ae60;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+  transition: all .45s ease;
+  box-shadow: 0 6px 15px rgb(36 37 38 / 8%);
+}
+
+.login-btn:hover{
+  background-color: #34da79 !important;
+}
+
+.login-btn > img{
+  width: 40px;
+  height: auto;
+}
+
+.register-btn{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 63%;
+  border-radius: 32px;
+  background-color: #27ae60;
+  color: #fff;
+  width: 22%;
+  height: 44px;
+  cursor: pointer;
+  transition: all .3s ease;
+  box-shadow: 0 6px 15px rgb(36 37 38 / 8%);
+}
+
+.register-btn:hover{
+  background-color: #34da79;
+}
+
+.enter{
+  transform: rotate(180deg) translateX(-2%) scale(.95);
+}
+
+.loading{
+  animation: rotate .87s linear infinite;
+}
+
+.login-error{
+  width: 32px !important;
+  padding: 3px !important;
+  animation: swing .4s ease;
+}
+
+.info{
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  z-index: 20;
+  min-width: 380px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  padding: 15px 15px 15px 20px;
+  transition: opacity .3s, transform .4s, top .4s ;
+}
+
+.warn{
+  background-color: rgb(253,246,236);
+  color: rgb(230,162,60);
+  border: 1px solid #faecd8;
+}
+
+.error{
+  background-color: rgb(254,240,240);
+  color: #F56C6C;
+  border: 1px solid #fde2e2;
+}
+
+.success-model{
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3.3rem;
+  font-weight: bold;
+  color: #2ecc71;
+  background-color: #fff;
+  animation: move .75s cubic-bezier(0.86,0,0.07,1);
+}
+
+.moveRight{
+  animation: moveRight .47s cubic-bezier(0.08,0.82,0.17,1);;
+}
+
+.moveLeft{
+  animation: moveLeft .47s cubic-bezier(0.08,0.82,0.17,1);;
+}
+
+@keyframes moveRight {
+  0%{
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100%{
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes moveLeft {
+  100%{
+    transform: translateX(100%);
+    opacity: 1;
+  }
+  0%{
+    transform: translateX(0);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+@keyframes move {
+  0%{
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100%{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes swing {
+  0%{
+    transform: translateX(0)
+  }
+  33%{
+    transform: translateX(-30%);
+  }
+  66%{
+    transform: translateX(30%);
+  }
+  100%{
+    transform: translateX(-0);
+  }
+}
+
+@keyframes rotate {
+  0%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes flip{
+  0%{
+      transform:  translate(-50%, -50%) rotateY(0deg);
+  }
+  100%{
+      transform:  translate(-50%, -50%) rotateY(180deg);
+  }
+}
+
+@keyframes flip-reverse{
+  100%{
+      transform: translate(-50%, -50%) rotateY(0deg);
+  }
+  0%{
+      transform: translate(-50%, -50%) rotateY(180deg);
+  }
+}
+
+@keyframes movement {
+  0%, 100% {
+    background-size: 
+      130vmax 130vmax,
+      80vmax 80vmax,
+      90vmax 90vmax,
+      110vmax 110vmax,
+      90vmax 90vmax;
+    background-position:
+      -80vmax -80vmax,
+      60vmax -30vmax,
+      10vmax 10vmax,
+      -30vmax -10vmax,
+      50vmax 50vmax;
+  }
+  25% {
+    background-size: 
+      100vmax 100vmax,
+      90vmax 90vmax,
+      100vmax 100vmax,
+      90vmax 90vmax,
+      60vmax 60vmax;
+    background-position:
+      -60vmax -90vmax,
+      50vmax -40vmax,
+      0vmax -20vmax,
+      -40vmax -20vmax,
+      40vmax 60vmax;
+  }
+  50% {
+    background-size: 
+      80vmax 80vmax,
+      110vmax 110vmax,
+      80vmax 80vmax,
+      60vmax 60vmax,
+      80vmax 80vmax;
+    background-position:
+      -50vmax -70vmax,
+      40vmax -30vmax,
+      10vmax 0vmax,
+      20vmax 10vmax,
+      30vmax 70vmax;
+  }
+  75% {
+    background-size: 
+      90vmax 90vmax,
+      90vmax 90vmax,
+      100vmax 100vmax,
+      90vmax 90vmax,
+      70vmax 70vmax;
+    background-position:
+      -50vmax -40vmax,
+      50vmax -30vmax,
+      20vmax 0vmax,
+      -10vmax 10vmax,
+      40vmax 60vmax;
+  }
+}

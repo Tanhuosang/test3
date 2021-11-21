@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>主页</title>
+		<style type="text/css">
+			
+			body{
+				background-image: url("asset/背景.png");
+				background-repeat: no-repeat;
+				background-size: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				height: 100%;
+				position: absolute;
+			}
+			.container{
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: space-around;
+			}
+			img{
+				width:330px;
+				height:440px;
+			}
+			.image{
+				cursor: pointer;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			p{
+				color:darkorange;
+				font-size: 20px;
+				width:10px;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="image"><img src="asset/选项.png" /><p>岩浆岩</p></div>
+	    	<div class="image"><img src="asset/选项.png" /><p>沉积岩</p></div>
+	    	<div class="image"><img src="asset/选项.png" /><p>变质岩</p></div>
+		</div>
+		<!--<script>
+			function redirect1(){
+      			self.location = 'home.html';
+    		}
+			function redirect2(){
+      			self.location = 'home.html';
+    		}
+			function redirect3(){
+      			self.location = 'home.html';
+    		}
+		</script>-->
+	</body>
+</html>

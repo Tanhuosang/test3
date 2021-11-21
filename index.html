@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <span>岩石圈探险</span>
+  <div class="container">
+    <div class="top">
+      <div class="avatar front">
+        <img src="asset/avatar_student.svg">
+        <div class="mask-front">
+          我是学生
+        </div>
+      </div>
+      <div class="avatar back">
+        <img src="asset/avatar_teacher.svg">
+        <div class="mask-back">
+          我是老师
+        </div>
+      </div>
+    </div>
+    <div class="mask-success" style="z-index: 20; opacity: 1; animation: fadeIn 1s cubic-bezier(0.86,0,0.07,1); display: none;">
+      <img src="asset/success.svg">
+    </div>
+    <div class="form login">
+      <div class="wrapper">
+        <div class="input-data">
+          <input type="text" required>
+          <div class="underline"></div>
+          <label>账号:</label>
+        </div>
+      </div>
+      <div class="wrapper">
+        <div class="input-data">
+          <input type="password" required>
+          <div class="underline"></div>
+          <label>密码:</label>
+        </div>
+      </div>
+      <div style="position: absolute; width: 60%; top: 50%; font-size: .7rem; display: flex; justify-content: space-between; align-items: center;">
+        <div class="tag-btn" id="tag-btn0">
+          <p>还没有账号？</p>
+          <div>立即注册</div>
+        </div>
+        <div class="tag-btn"><div>忘记密码</div></div>
+      </div>
+      <div class="login-btn" id="tag-btn1">
+        <img class="enter" src="asset/enter.svg">
+      </div>
+    </div>
+    <div class="right-form" style="position: absolute; width: 100%; height: 100%; overflow: hidden; display: none; border-radius: 32px;">
+      <div class="form register moveRight" style="background-color: #fff; transition: all .47s cubic-bezier(0.08,0.82,0.17,1);;">
+        <div class="wrapper">
+          <div class="input-data">
+            <input type="text" class="account" required>
+            <div class="underline"></div>
+            <label>账号:</label>
+          </div>
+        </div>
+        <div class="wrapper">
+          <div class="input-data">
+            <input type="password" required>
+            <div class="underline"></div>
+            <label>密码:</label>
+          </div>
+        </div>
+        <div style="position: absolute; display: flex; width: 60%; justify-content: space-between; align-items: center; top: 44%;">
+          <div class="wrapper" style="width: 65%">
+            <div class="input-data">
+              <input type="text" class="number" maxlength="11" required>
+              <div class="codeTag">发送</div>
+              <div class="underline"></div>
+              <label>手机:</label>
+            </div>
+          </div>
+          <div class="wrapper" style="width: 30%">
+            <div class="input-data">
+              <input type="text" class="code" required>
+              <div class="underline"></div>
+              <label>验证码:</label>
+            </div>
+          </div>
+        </div>
+        <div class="register-btn">
+          立即注册
+        </div>
+        <div class="back-btn">
+          <img src="asset/back.svg" style="height: 14px;">
+          返回登录
+        </div>
+      </div>
+    </div>
+    <div class="model" style="position: absolute; width: 60%; height: 100%; overflow: hidden; top: 0; left: 50%; transform: translateX(-50%); display: none;">
+      <div class="success-model">
+        登录成功
+      </div>
+    </div>
+  </div>
+  <div class="info warn">
+    <img src="asset/warn.svg" style="height: 16px;margin-right: 14px;">
+    <span></span>
+  </div>
+  <div class="info error">
+    <img src="asset/error.svg" style="height: 16px;margin-right: 14px;">
+    <span></span>
+  </div>
+  <script src="jquery-2.1.1.min.js"></script>
+  <script>
+    var identity = 0;
+    var isAuthorizing = false;
+    var count = 60;
+    var timer = null;
+
+    $('.form.login input[type=password]').bind('keypress', e => {
+      if(e.keyCode == '13')login();
+    })
+    $('.login-btn').bind('click', login);
+    $('.register-btn').bind('click', register);
+    $('.avatar').bind('mouseover', showMask);
+    $('.avatar').bind('mouseout', hideMask);
+    $('.top').bind('click', flip);
+    $('.number').bind('input', showCodeTag);
+    $('.codeTag').bind('click', countDown);
+    $('#tag-btn0 div').bind('click', toRegister);
+    $('.back-btn').bind('click', backToLogin);
+
+    $('.mask-front').css('z-index', '10');
+
+    function warn(msg){
+      $('.info.warn span').text(msg);
+      $('.info.warn').css('top','30px');
+      $('.info.warn').css('opacity','1');
+      setTimeout(() => {
+        $('.info.warn').css('top','0');
+        $('.info.warn').css('opacity','0');
+      },4000);
+    }
+
+    function error(msg){
+      $('.info.error span').text(msg);
+      $('.info.error').css('top','30px');
+      $('.info.error').css('opacity','1');
+      let dom = $('.login-btn img');
+      setTimeout(() => {
+        $('.info.error').css('top','0');
+        $('.info.error').css('opacity','0');
+      },4000);
+    }
+
+    function showMask(){
+      if(identity == 0){
+        $('.avatar.front').addClass('scale');
+        $('.mask-front').css('opacity', '1');
+      }
+      else{
+        $('.avatar.back').addClass('scale-reverse');
+        $('.mask-back').css('opacity', '1');
+      }
+    }
+
+    function hideMask(){
+      if(identity == 0){
+        $('.avatar.front').removeClass('scale');
+        $('.mask-front').css('opacity', '0');
+      }
+      else{
+        $('.avatar.back').removeClass('scale-reverse');
+        $('.mask-back').css('opacity', '0');
+      }
+    }
+
+    function flip(){
+      if(identity == 0)identity = 1;
+      else identity = 0;
+      if(identity == 1){
+        $('.top').css('transform', 'translate(-50%, -50%) rotateY(180deg)');
+        $('.avatar.front').removeClass('scale');
+        $('.mask-front').css('opacity', '0');
+        $('.mask-front').css('z-index', '0');
+        $('.mask-back').css('z-index', '10');
+        $('.top').addClass('flip');
+      }
+      else{
+        $('.top').css('transform', 'translate(-50%, -50%)');
+        $('.avatar.back').removeClass('scale-reverse');
+        $('.mask-back').css('opacity', '0');
+        $('.mask-back').css('z-index', '0');
+        $('.mask-front').css('z-index', '10');
+        $('.top').addClass('flip-reverse');
+      }
+
+      setTimeout(() => {
+        $('.top').removeClass('flip');
+        $('.top').removeClass('flip-reverse');
+      },500)
+    }
+
+    function showErrorAnimation(){
+      let dom = $('.login-btn img');
+        $('.login-btn').css('background-color', '#F56C6C');
+        dom.removeClass('loading');
+        dom.attr('src', 'asset/login_error.svg');
+        dom.addClass('login-error');
+
+        setTimeout(() => {
+          let dom = $('.login-btn img');
+          $('.login-btn').css('background-color', '#27ae60');
+          dom.removeClass('login-error');
+          dom.attr('src', 'asset/enter.svg');
+          dom.addClass('enter');
+        },800)
+    }
+
+    function showSuccessAnimation(){
+      $('.mask-success').css('display', 'flex');
+      $('.model').css('display', 'block');
+    }
+
+    function toRegister(){
+      $('.right-form').css('display','block');
+    }
+
+    function backToLogin(){
+      setTimeout(() => {
+        $('.form.register').css('transform', 'translateX(0)');
+        $('.right-form').css('display','none');
+        $('.form.register').removeClass('moveLeft');
+        $('.form.register').addClass('moveRight');
+      },470);
+      $('.form.register').removeClass('moveRight')
+      $('.form.register').addClass('moveLeft');
+    }
+
+    function showCodeTag(event){
+      let length = event.currentTarget.value.length;
+      let dom = $('.codeTag');
+      if(length == 11){
+        dom.css('display', 'block');
+      }
+      else dom.css('display', 'none');
+    }
+
+    function resetAll(){
+      $('.form.login input[type=text]').val('');
+      $('.form.login input[type=password]').val('');
+      $('.form.login input[type=text]').focus();
+    }
+
+    function login(){
+      let account = $('.form.login input[type=text]').val();
+      let password = $('.form.login input[type=password]').val();
+      //check input
+      if(!account){
+        warn('请输入账号');
+        $('.form.login input[type=text]').focus();
+        return;
+      }
+      else if(!password){
+        warn('请输入密码');
+        $('.form.login input[type=password]').focus();
+        return;
+      }
+
+      let dom = $('.login-btn img');
+      dom.removeClass('enter');
+      dom.attr('src', 'asset/loading.svg');
+      dom.addClass('loading');
+      $.ajax({
+            "type":"POST",
+            "url":"http://47.96.112.189:8092/studentLogin",
+            "headers": {'Content-Type': 'application/json'},
+            "data":JSON.stringify({
+              account,
+              password
+            }),
+            "dataType":"json",
+            "error":function(errror){
+                error("服务器请求出错！");
+                let dom = $('.login-btn img');
+                dom.removeClass('loading');
+                dom.attr('src', 'asset/enter.svg');
+                dom.addClass('enter');
+            },
+            "success":function(data){
+                console.log(data);
+
+                //error
+                setTimeout(() => {
+                  if(data.code == 3){
+                    error('用户不存在')
+                    showErrorAnimation();
+                    resetAll();
+                  }
+                  if(data.code == 400){
+                    error('密码错误')
+                    showErrorAnimation();
+                    $('.form.login [type=password]').focus();
+                    $('.form.login input[type=password]').select();
+                  }
+                  if(data.code == 200){
+                    showSuccessAnimation();
+                    setTimeout(() => {
+                      redirect();
+                    },2000);
+                  }
+                },800)
+            }
+    	  });
+    }
+
+    function register(){
+      let account = $('.form.register .account').val();
+      let password = $('.form.register input[type=password]').val();
+      let phoneNumber = $('.form.register .number').val();
+      let code = $('.form.register .code').val();
+      //check input
+      if(!account){
+        warn('请输入账号');
+        $('.form.register .account').focus();
+        return;
+      }
+      else if(!password){
+        warn('请输入密码');
+        $('.form.register input[type=password]').focus();
+        return;
+      }
+      else if(!phoneNumber){
+        warn('请输入手机');
+        $('.form.register .number').focus();
+        return;
+      }
+      else if(!code){
+        warn('请输入验证码');
+        $('.form.register .code').focus();
+        return;
+      }
+      let dom = $('.register-btn');
+      dom.text('');
+      let img = $(`<img src="asset/loading.svg" class="loading" style="position: absolute; width: 32px; transition: opacity .8s ease; opacity: 0">`);
+      dom.append(img);
+      dom.css('width', '44px');
+      dom.css('border-radius', '50%');
+      $('.register img').css('opacity', '1');
+
+      setTimeout(() => {
+        resetRegisterBtn();
+      },2000);
+    }
+
+    function resetRegisterBtn(){
+      let dom = $('.register-btn');
+      $('.register-btn img').remove();
+      dom.text('立即注册');
+      dom.css('width', '22%');
+      dom.css('border-radius', '32px');
+    }
+
+    function redirect(){
+      self.location = 'home.html';
+    }
+
+    function countDown(){
+      if(!isAuthorizing){
+        isAuthorizing = true;
+        let dom = $('.codeTag');
+        dom.css('color', 'grey');
+        dom.css('cursor', 'auto');
+        dom.text(count + 's');
+        timer = setInterval(() => {
+          let dom = $('.codeTag');
+          count--;
+          dom.text(count + 's');
+          if(count == 0){
+            dom.css('color', '#27ae60');
+            dom.css('cursor', 'pointer');
+            dom.text('发送');
+            isAuthorizing = false;
+            count = 60;
+            clearInterval(timer);
+          }
+        },1000)
+      }
+    }
+  </script>
+</body>
+</html>
